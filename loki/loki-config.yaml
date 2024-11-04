@@ -1,0 +1,69 @@
+server:
+  http_listen_port: 3100
+ingester:
+  lifecycler:
+    address: 127.0.0.1
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+    final_sleep: 0s
+  chunk_idle_period: 5m
+  chunk_retain_period: 20s
+schema_config:
+  configs:
+    - from: 2020-07-01
+      store: boltdb-shipper
+      object_store: s3
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+storage_config:
+  aws:
+    bucketnames: ranchat-loki
+    endpoint: s3.ap-northeast-2.amazonaws.com
+    s3: s3://ranchat-loki
+    region: ap-northeast-2
+    access_key_id: ${IAM_LOKI_ACCESS_KEY}
+    secret_access_key: ${IAM_LOKI_SECRET_KEY}
+    s3forcepathstyle: true
+    insecure: false
+  boltdb_shipper:
+    cache_ttl: 24h
+limits_config:
+  enforce_metric_name: false
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+  ingestion_rate_mb: 10
+  ingestion_burst_size_mb: 20
+  max_cache_freshness_per_query: 10m
+  split_queries_by_interval: 5m
+  max_entries_limit_per_query: 1000
+  max_global_streams_per_user: 1000
+  max_streams_per_user: 0
+  max_label_value_length: 20480
+  max_label_name_length: 10240
+  max_label_names_per_series: 300
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+  rule_path: /tmp/rules/fake/
+  alertmanager_url: http://localhost:9093
+  ring:
+    kvstore:
+      store: inmemory
+  enable_api: true
+querier:
+  engine:
+    timeout: 5m
+  query_timeout: 5m
+query_scheduler:
+  max_outstanding_requests_per_tenant: 4096
+frontend:
+  max_outstanding_per_tenant: 4096
+common:
+  path_prefix: /loki
+  replication_factor: 1

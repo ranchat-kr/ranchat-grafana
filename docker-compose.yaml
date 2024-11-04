@@ -1,0 +1,52 @@
+---
+version: "3"
+
+networks:
+  ranchat-grafana:
+
+services:
+  grafana:
+    build:
+      context: ./grafana
+    ports:
+      - 3000
+    volumes:
+      - ~/.aws:/usr/share/grafana/.aws:ro
+      - ./grafana/storage:/var/lib/grafana:rw
+    networks:
+      - ranchat-grafana
+
+  loki:
+    image: grafana/loki:2.7.1
+    env_file:
+      - .env
+    command: "-config.file=/etc/loki/config.yaml"
+    ports:
+      - 3100
+      - 7946
+      - 9095
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/config.yaml:ro
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ranchat-grafana
+
+  gateway:
+    build:
+      context: ./gateway
+    ports:
+      - 80
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ranchat-grafana
+    depends_on:
+      - grafana
+      - loki
