@@ -7,6 +7,7 @@ apiVersion: 1
 datasources:
   - name: Loki
     type: loki
+    isDefault: true
     access: proxy
     url: http://loki:3100
     jsonData:
