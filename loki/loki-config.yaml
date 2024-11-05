@@ -10,15 +10,17 @@ ingester:
     final_sleep: 0s
   chunk_idle_period: 5m
   chunk_retain_period: 20s
+
 schema_config:
   configs:
-    - from: 2020-07-01
+    - from: 2024-11-05
       store: boltdb-shipper
       object_store: s3
       schema: v11
       index:
         prefix: index_
         period: 24h
+      
 storage_config:
   aws:
     bucketnames: ranchat-loki
@@ -31,6 +33,7 @@ storage_config:
     insecure: false
   boltdb_shipper:
     cache_ttl: 24h
+
 limits_config:
   enforce_metric_name: false
   reject_old_samples: true
@@ -45,6 +48,8 @@ limits_config:
   max_label_value_length: 20480
   max_label_name_length: 10240
   max_label_names_per_series: 300
+  retention_period: 720h  # 30일
+
 ruler:
   storage:
     type: local
@@ -56,14 +61,18 @@ ruler:
     kvstore:
       store: inmemory
   enable_api: true
+
 querier:
   engine:
     timeout: 5m
   query_timeout: 5m
+
 query_scheduler:
   max_outstanding_requests_per_tenant: 4096
+
 frontend:
   max_outstanding_per_tenant: 4096
+
 common:
   path_prefix: /loki
   replication_factor: 1

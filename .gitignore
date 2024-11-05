@@ -1,5 +1,6 @@
 *.env
 .idea
 *.zip
+.DS_Store
 grafana/storage
 promtail-for-local-test/positions.yaml

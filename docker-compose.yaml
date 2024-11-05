@@ -3,6 +3,7 @@ version: "3"
 
 networks:
   ranchat-grafana:
+    external: true
 
 services:
   grafana:
@@ -23,9 +24,9 @@ services:
       - IAM_LOKI_SECRET_KEY=${IAM_LOKI_SECRET_KEY}
     command: "-config.file=/etc/loki/config.yaml"
     ports:
-      - 3100
-      - 7946
-      - 9095
+      - "3100:3100"
+      - "7946:7946"
+      - "9095:9095"
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/config.yaml:ro
     healthcheck:

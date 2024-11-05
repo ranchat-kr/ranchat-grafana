@@ -1,4 +1,4 @@
-FROM grafana/grafana:11.3.0
+FROM grafana/grafana:10.2.5
 
 ENV GF_PATHS_PROVISIONING=/etc/grafana/provisioning
 ENV GF_AUTH_ANONYMOUS_ENABLED=true
