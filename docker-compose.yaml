@@ -8,11 +8,11 @@ services:
   grafana:
     build:
       context: ./grafana
+    user: root
     ports:
       - "3000:3000"
     volumes:
-      - ~/.aws:/usr/share/grafana/.aws:ro
-      - ./grafana/storage:/var/lib/grafana:rw
+     - ./grafana/storage:/var/lib/grafana:rw,Z
     networks:
       - ranchat-grafana
 
