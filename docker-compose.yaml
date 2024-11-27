@@ -21,7 +21,9 @@ services:
     environment:
       - IAM_LOKI_ACCESS_KEY=${IAM_LOKI_ACCESS_KEY}
       - IAM_LOKI_SECRET_KEY=${IAM_LOKI_SECRET_KEY}
-    command: "-config.file=/etc/loki/config.yaml"
+    command:
+      - "-config.file=/etc/loki/config.yaml"
+      - "-config.expand-env=true"
     ports:
       - "3100:3100"
       - "7946:7946"
