@@ -6,6 +6,7 @@ networks:
 
 services:
   grafana:
+    restart: always
     build:
       context: ./grafana
     user: root
@@ -18,6 +19,7 @@ services:
 
   loki:
     image: grafana/loki:2.7.1
+    restart: always
     environment:
       - IAM_LOKI_ACCESS_KEY=${IAM_LOKI_ACCESS_KEY}
       - IAM_LOKI_SECRET_KEY=${IAM_LOKI_SECRET_KEY}
@@ -39,6 +41,7 @@ services:
       - ranchat-grafana
 
   gateway:
+    restart: always
     build:
       context: ./gateway
     ports:
